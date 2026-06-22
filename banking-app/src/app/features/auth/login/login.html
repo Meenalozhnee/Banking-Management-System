@@ -1,0 +1,107 @@
+<div class="auth-container">
+
+  <div class="left-section">
+
+    <div class="branding">
+
+      <h1>Digital Banking</h1>
+
+      <p>
+        Secure Banking Platform
+      </p>
+
+      <img src="assets/banking_illustration.png" alt="Banking Illustration" class="banking-img" />
+
+    </div>
+
+  </div>
+
+  <div class="right-section">
+
+    <mat-card class="auth-card">
+
+      <h2>Welcome Back</h2>
+
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="submit()">
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>Username</mat-label>
+
+          <input
+            matInput
+            formControlName="username">
+
+          <mat-error
+            *ngIf="loginForm.get('username')?.hasError('required')">
+
+            Username is required
+
+          </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+          <mat-label>Password</mat-label>
+
+          <input
+            matInput
+            [type]="hidePassword ? 'password':'text'"
+            formControlName="password">
+
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword=!hidePassword">
+
+            <mat-icon>
+              {{hidePassword ? 'visibility_off':'visibility'}}
+            </mat-icon>
+
+          </button>
+
+          <mat-error
+            *ngIf="loginForm.get('password')?.hasError('required')">
+
+            Password is required
+
+          </mat-error>
+
+          <mat-error
+            *ngIf="loginForm.get('password')?.hasError('minlength')">
+
+            At least 6 characters
+
+          </mat-error>
+
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-btn">
+
+          Login
+
+        </button>
+
+      </form>
+
+      <div class="form-footer animate-in-d2">
+      <span>Don't have an account?</span>
+      <button type="button" class="btn-register" (click)="goToRegister()">Create one</button>
+    </div>     Register
+        </a>
+
+      </div>
+
+    </mat-card>
+
+  </div>
+
+</div>

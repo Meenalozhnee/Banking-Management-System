@@ -1,0 +1,21 @@
+<!-- main-layout.component.html -->
+
+<div class="container">
+  <aside class="sidebar">
+    <h2>Banking System</h2>
+
+    <ul>
+      <li><a routerLink="/dashboard">Dashboard</a></li>
+      <li><a routerLink="/accounts">Accounts</a></li>
+      <li><a routerLink="/transactions">Transactions</a></li>
+      <li><a routerLink="/fd">Fixed Deposits</a></li>
+      <li><a routerLink="/loans">Loans</a></li>
+      <li><a routerLink="/audit">Audit Logs</a></li>
+      <li><a routerLink="/admin">Admin</a></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

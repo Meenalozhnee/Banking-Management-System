@@ -1,0 +1,32 @@
+<div class="fd-container">
+  <h2>Fixed Deposits</h2>
+  <table *ngIf="fds && fds.length; else noFd" class="fd-table">
+    <thead>
+      <tr>
+        <th>Account</th>
+        <th>Amount</th>
+        <th>Interest Rate</th>
+        <th>Tenure (Months)</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fd of fds">
+        <td>{{ fd.accountNumber }}</td>
+        <td>{{ fd.amount | currency:'INR' }}</td>
+        <td>{{ fd.interestRate }}%</td>
+        <td>{{ fd.tenureMonths }}</td>
+        <td class="badge" [ngClass]="fd.status === 'ACTIVE' ? 'active' : 'closed'">
+          {{ fd.status }}
+        </td>
+        <td>
+          <button *ngIf="fd.status === 'ACTIVE'" class="btn-sm" (click)="closeFd(fd.id)">Close</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #noFd>
+    <div class="empty-small">No Fixed Deposits found.</div>
+  </ng-template>
+</div>

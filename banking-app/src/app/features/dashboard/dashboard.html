@@ -1,0 +1,115 @@
+<section class="dashboard-container">
+  <header class="dashboard-header">
+    <h1 class="gradient-text">Welcome back, {{ userName }}!</h1>
+    <p class="date-text">{{ today | date:'EEEE, MMMM d, y' }}</p>
+  </header>
+  <div class="top-actions">
+    <button class="btn-icon" (click)="loadData()" title="Refresh">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+    <a routerLink="/transaction-history" class="btn-icon" title="History">
+      <i class="fas fa-clock"></i>
+    </a>
+  </div>
+  <div class="glass-balance-card">
+    <div class="glass-glow"></div>
+    <div class="glass-shimmer"></div>
+    <div class="balance-content">
+      <div class="balance-top">
+        <div class="balance-label"><i class="fas fa-wallet"></i> Total Balance</div>
+        <div class="balance-badge" *ngIf="accounts.length > 0"><i class="fas fa-check-circle"></i> Verified</div>
+      </div>
+      <div class="balance-amount">{{ totalBalance | currency:'INR' }}</div>
+      <div class="balance-meta">
+        <div class="meta-item"><span class="meta-num">{{ accounts.length }}</span><span class="meta-label">Accounts</span></div>
+        <div class="meta-item"><span class="meta-num">{{ fdCount }}</span><span class="meta-label">F.Deposits</span></div>
+        <div class="meta-item"><span class="meta-num">{{ loanCount }}</span><span class="meta-label">Loans</span></div>
+      </div>
+      <div class="balance-actions">
+        <a routerLink="/deposit" class="glass-btn glass-btn-primary"><i class="fas fa-arrow-down"></i> Deposit</a>
+        <a routerLink="/transfer" class="glass-btn glass-btn-secondary"><i class="fas fa-paper-plane"></i> Transfer</a>
+        <a routerLink="/withdraw" class="glass-btn glass-btn-secondary"><i class="fas fa-arrow-up"></i> Withdraw</a>
+      </div>
+    </div>
+    <div class="balance-chart-mini">
+      <div class="chart-ring">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#grad)" stroke-width="8" stroke-dasharray="264" [attr.stroke-dashoffset]="264 * (1 - balanceRatio)" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#fbbf24"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="ring-center"><i class="fas fa-indian-rupee-sign"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let s of stats" [style.background]="s.bg" [style.color]="s.color">
+      <i [class]="s.icon" class="stat-icon"></i>
+      <div class="stat-info"><span class="stat-value">{{ s.value }}</span><span class="stat-label">{{ s.label }}</span></div>
+    </div>
+  </div>
+  <div class="quick-actions">
+    <a *ngFor="let act of [{label:'Deposit',icon:'fa-arrow-down',color:'#10b981',bg:'#ecfdf5',link:'/deposit'},{label:'Withdraw',icon:'fa-arrow-up',color:'#ef4444',bg:'#fef2f2',link:'/withdraw'},{label:'Transfer',icon:'fa-exchange-alt',color:'#3b82f6',bg:'#eff6ff',link:'/transfer'},{label:'FD',icon:'fa-piggy-bank',color:'#f59e0b',bg:'#fef3c7',link:'/fixed-deposits'},{label:'Loans',icon:'fa-hand-holding-usd',color:'#ec4899',bg:'#fce7f3',link:'/loans'},{label:'History',icon:'fa-history',color:'#8b5cf6',bg:'#f5f3ff',link:'/transaction-history'}]" class="action-glass" [routerLink]="act.link" [style.background]="act.bg" [style.color]="act.color">
+      <div class="action-glass-icon" [style.background]="act.bg" [style.color]="act.color"><i class="fas" [ngClass]="'fa-' + act.icon"></i></div>
+      <span>{{ act.label }}</span>
+    </a>
+  </div>
+  <div class="bottom-section">
+    <div class="recent-transactions" *ngIf="recentTxns.length">
+      <h2><i class="fas fa-clock"></i> Recent Transactions</h2>
+      <a routerLink="/transaction-history" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+      <div class="txn-list">
+        <div class="txn-item" *ngFor="let t of recentTxns | slice:0:5">
+          <div class="txn-icon" [class.credit]="isCredit(t)" [class.debit]="isDebit(t)" [class.transfer]="t.transactionType === 'TRANSFER'"><i [class]="txnIcon(t)"></i></div>
+          <div class="txn-info"><span class="txn-title">{{ t.transactionType | titlecase }}</span><span class="txn-sub">{{ t.description || 'No description' }}</span></div>
+          <div class="txn-amount" [class.credit]="isCredit(t)" [class.debit]="isDebit(t)">{{ isCredit(t) ? '+' : '-' }}{{ t.amount | currency:'INR' }}</div>
+          <div class="txn-date">{{ t.transactionDate | date:'dd MMM, h:mm a' }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-cards">
+      <div class="info-card" style="border-left-color:#3b82f6;">
+        <i class="fas fa-building-columns" style="color:#3b82f6"></i>
+        <div><span>Total Accounts</span><strong>{{ accounts.length }}</strong></div>
+      </div>
+      <div class="info-card" style="border-left-color:#f59e0b;">
+        <i class="fas fa-piggy-bank" style="color:#f59e0b"></i>
+        <div><span>Fixed Deposits</span><strong>{{ fdCount }}</strong></div>
+      </div>
+      <div class="info-card" style="border-left-color:#ec4899;">
+        <i class="fas fa-hand-holding-usd" style="color:#ec4899"></i>
+        <div><span>Active Loans</span><strong>{{ loanCount }}</strong></div>
+      </div>
+    </div>
+  </div>
+  <app-chatbot></app-chatbot>
+</section>
+
+<div class="cards">
+
+  <div class="card">
+    <h3>Total Balance</h3>
+    <p>₹ 1,25,000</p>
+  </div>
+
+  <div class="card">
+    <h3>Accounts</h3>
+    <p>3</p>
+  </div>
+
+  <div class="card">
+    <h3>Loans</h3>
+    <p>1</p>
+  </div>
+
+  <div class="card">
+    <h3>Fixed Deposits</h3>
+    <p>2</p>
+  </div>
+
+</div>
