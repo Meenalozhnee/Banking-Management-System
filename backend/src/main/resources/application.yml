@@ -1,0 +1,31 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/banking_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: example_user
+    password: example_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: example@gmail.com
+    password: example_password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+app:
+  jwt:
+    secret: "change-this-secret-key-to-a-very-long-production-secret-key-256-bit"
+    expiration-ms: 86400000
+  statement:
+    output-dir: statements
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

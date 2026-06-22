@@ -1,0 +1,49 @@
+# Build outputs
+target/
+**/target/
+
+# Package distributions
+*.jar
+*.war
+*.zip
+
+# JDK bundles (if present)
+jdk-*/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Node / Angular
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Angular build outputs
+banking-app/dist/
+banking-app/out-tsc/
+banking-app/.angular/
+banking-app/.sass-cache/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Logs
+/logs
+*.log
+
+# Environment files
+.env
+
+# Test results
+**/surefire-reports/
+**/test-classes/
